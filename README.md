@@ -10,4 +10,4 @@ It doesn't contain any release yet, for try it you may use a develop environment
 
 1. python > 3.10
 2. Gtk > 4.10
-3. PyGObject == lastversion
+3. PyGObject
