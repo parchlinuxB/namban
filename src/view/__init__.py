@@ -87,6 +87,7 @@ class Button(Gtk.Button):
             self.set_size_request(*size)
             self.set_hexpand(False)
             self.set_vexpand(False)
+        self.connect('clicked', onClick)
 
 class profile(Gtk.Box):
     def __init__(self,app:domain.app,profile:domain.profile):
@@ -102,14 +103,14 @@ class profile(Gtk.Box):
         )
         self.fixed.put(
             Button(
-                trashIcon(),None,[]
+                trashIcon(),lambda x:x,[]
             )
             ,
             190,0
         )
         self.fixed.put(
             Button(
-                pencilIcon(),None,[]
+                pencilIcon(),lambda x : x,[]
             )
             ,
             150,0
@@ -140,7 +141,7 @@ class addButton(Gtk.Overlay):
         self.button.add_css_class('add-btn')
         self.set_child(self.button)
 
-class wondowContainer(Gtk.Fixed):
+class mainWindowContainer(Gtk.Fixed):
     def __init__(self, app):
         super().__init__()
         self.put(
@@ -150,14 +151,55 @@ class wondowContainer(Gtk.Fixed):
             addButton(app),10,350
         )
         
+class editWindowContainer(Gtk.Fixed):
+    def handleOK (self, *args):
+        # self.then(self.data)
+        self.app.window.goMain()
+    def update(self, baseData ,then):
+        self.put(
+            Button(
+                Label('0'),self.handleOK
+            ),0,0
+        )
+    def __init__(self,app):
+        super().__init__()
+        self.app = app
+
+
+class Stack(Gtk.Stack):
+    def __init__(self,**data):
+        super().__init__()
+        self.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+        self.data = data
+        self.add(**data)
+    def show(self,name):
+        self.set_visible_child(
+            self.data[name]
+        )
+    def add(self,**data):
+        self.data = {
+            **self.data,
+            **data
+        }
+        for _, widget in data.items():
+            Gtk.Stack.add_child(self,widget)
+        
 
 
 class window(Gtk.ApplicationWindow):
     def __init__(self, app=None):
         super().__init__(application=app,title=settings.WINDOW_TITLE)
+        app.window = self
+        self.app = app
         self.set_default_size(300,400)
+        self.main = mainWindowContainer(app)
+        self.editor = editWindowContainer(app)
+        self.stack = Stack(
+            main = self.main,
+            editor = self.editor
+        )
         self.set_child(
-            wondowContainer(app)
+            self.stack
         )
         cssProvider = Gtk.CssProvider()
         cssProvider.load_from_path(
@@ -171,6 +213,12 @@ class window(Gtk.ApplicationWindow):
             cssProvider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
+        self.goEdit(None,None)
+    def goMain(self):
+        self.stack.show('main')
+    def goEdit(self, baseData, then):
+        self.editor.update(baseData, then)
+        self.stack.show('editor')
 
 __all__ = [
     window
