@@ -3,66 +3,72 @@ import settings
 import report
 import os
 import json
+class storage:
 
-def read():
-    def loadServer(rawServ)->domain.server:
+    def loadProf(self, rawProf):
+        try:
+            profWargs = {
+                "server1" : self.loadServ(rawProf['server1']),
+                "name": rawProf['name']
+            }
+            if "server2" in rawProf:
+                profWargs['server2'] = self.loadServ(rawProf['server2'])
+            return(
+                domain.profile(**profWargs)
+            )
+        except:
+            report.DataFile.InvalidProfile()
+    def loadServ(self,rawServ)->domain.server:
         return domain.server(
             **rawServ
         )
-    emptyConf = domain.appData([])
-    if not os.path.exists(settings.APP_DATA_FILE):
-        report.DataFile.InvalidFile()
-        return emptyConf
-    with open(settings.APP_DATA_FILE,"r") as f:
-        try:
-            rawData = json.loads(
-                f.read()
-            )
-        except:
+
+    def read(self):
+        emptyConf = domain.appData([])
+        if not os.path.exists(settings.APP_DATA_FILE):
             report.DataFile.InvalidFile()
             return emptyConf
-        profiles = []
-        for rawProf in  rawData.get('profiles',[]):
+        with open(settings.APP_DATA_FILE,"r") as f:
             try:
-                profWargs = {
-                    "server1" : loadServer(rawProf['server1']),
-                    "name": rawProf['name']
-                }
-                if "server2" in rawProf:
-                    profWargs['server2'] = loadServer(rawProf['server2'])
-                profiles.append(
-                    domain.profile(**profWargs)
+                rawData = json.loads(
+                    f.read()
                 )
             except:
-                report.DataFile.InvalidProfile()
-        return domain.appData(
-            profiles
-        )
+                report.DataFile.InvalidFile()
+                return emptyConf
+            profiles = []
+            for rawProf in  rawData.get('profiles',[]):
+                r = self.loadProf(rawProf)
+                if r:
+                    profiles.append(r)
+            return domain.appData(
+                profiles
+            )
 
-def write(appData:domain.appData):
-    def dumpServ(serv:domain.server) -> dict:
+    def write(self,appData:domain.appData):
+        rawData = {
+            "profiles":[
+                self.dumpProf(p) for p in appData.profiles
+            ]
+        }
+        try:
+            with open(settings.APP_DATA_FILE,"w+") as f:
+                f.write(
+                    json.dumps(rawData)
+                )
+        except:
+            report.DataFile.InvalidFile()
+
+    def dumpServ(self, serv:domain.server) -> dict:
         return {
             'type' : serv.type,
             'url' : serv.url
         }
-    def dumpProf(prof:domain.profile) -> dict:
+    def dumpProf(self, prof:domain.profile) -> dict:
         rawProf = {
-            "server1":dumpServ(prof.server1),
+            "server1":self.dumpServ(prof.server1),
             "name":prof.name
         }
         if prof.server2:
-            rawProf['server2'] = dumpServ(prof.server2)
+            rawProf['server2'] = self.dumpServ(prof.server2)
         return rawProf
-    rawData = {
-        "profiles":[
-            dumpProf(p) for p in appData.profiles
-        ]
-    }
-    try:
-        with open(settings.APP_DATA_FILE,"w+") as f:
-            f.write(
-                json.dumps(rawData)
-            )
-    except:
-        report.DataFile.InvalidFile()
-    

@@ -3,7 +3,6 @@ import settings
 import domain as domain
 from pathlib import Path
 from .textCheck import isIp,baseCheck
-import control
 
 class trashIcon(Gtk.Image):
     def __init__(self):
@@ -135,6 +134,7 @@ class profile(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.add_css_class('server')
         self.fixed = Gtk.Fixed()
+        self.app = app
         self.append(
             self.fixed
         )
@@ -144,14 +144,14 @@ class profile(Gtk.Box):
         )
         self.fixed.put(
             Button(
-                trashIcon(),lambda x:x,[]
+                trashIcon(),lambda *_:self.app.deleteProfile(profile),[]
             )
             ,
             190,0
         )
         self.fixed.put(
             Button(
-                pencilIcon(),lambda x : x,[]
+                pencilIcon(),lambda *_ : self.app.window.goEdit(profile,lambda newp : self.app.editProfile(profile, self.app.window.editor.dumpProfToInput(newp)) ),[]
             )
             ,
             150,0
@@ -161,12 +161,19 @@ class profile(Gtk.Box):
             10,0
         )
 
-class profileList(Gtk.Grid):
+class Grid(Gtk.Grid):
+    def empty (self):
+        children = self.get_children()
+        for child in children:
+            self.remove(child)
+
+class profileList(Grid):
     def __init__(self, app:domain.app):
         super().__init__()
         self.add_css_class('server-list')
         self.app = app
     def update(self):
+        self.remove_column(0)
         for i, p in enumerate(self.app.data.profiles):
             self.attach(
                 profile(self.app,p),
@@ -182,10 +189,10 @@ class addButton(Gtk.Overlay):
         self.button.set_css_classes(['add-btn'])
         self.set_child(self.button)
     def click(self, *_):
-        self.app.window.goEdit(None, lambda data: control.addProfile(
+        self.app.window.goEdit(None, lambda data: self.app.addProfile(
             domain.profile(
-                server1=domain.server(url=data['serv1'],type='dns'),
-                server2=domain.server(url=data['serv2'],type='dns') if data.get('serv2',False) else None,
+                server1=domain.server(url=data['server1'],type='dns'),
+                server2=domain.server(url=data['server2'],type='dns') if data.get('server2',False) else None,
                 name=data['name']
             )
             ))
@@ -265,8 +272,8 @@ class editWindowContainer(Gtk.Box):
         self.app = app
         self.inputs = [
             Input(self.app, "name", onchange=self.update, classes=['mt-6'], placeholder="Name"),
-            Input(self.app, "serv1",onchange=self.update, classes=['mt-2'], checker=isIp(),placeholder="Server 1"),
-            Input(self.app, "serv2",onchange=self.update, classes=['mt-2'], checker=isIp(),placeholder="Server 2 (optional)", optional=True)
+            Input(self.app, "server1",onchange=self.update, classes=['mt-2'], checker=isIp(),placeholder="Server 1"),
+            Input(self.app, "server2",onchange=self.update, classes=['mt-2'], checker=isIp(),placeholder="Server 2 (optional)", optional=True)
         ]
         self.form = Form(*self.inputs)
         for i in self.inputs : self.append(centerFloat(i))
@@ -307,6 +314,25 @@ class editWindowContainer(Gtk.Box):
  
     def back(self):
         self.app.window.goMain()
+
+    def loadProfFromInput(self, prof):
+        r = {
+            "name":prof.name,
+            "server1":prof.server1.url
+        }
+        if prof.server2:
+            r['server2'] = prof.server2.url
+        return r
+    def dumpProfToInput(self,prof):
+        wargs = {
+            "name":prof['name'],
+            "server1":self.app.loadServ({'url':prof['server1'],'type':'dns'})
+        }
+        if prof.get('server2',False).strip():
+            wargs['server2'] = self.app.loadServ({'url':prof['server2'],'type':'dns'})
+        return domain.profile(**wargs)
+
+
 
 class Stack(Gtk.Stack):
     def __init__(self,**data):
@@ -355,13 +381,16 @@ class window(Gtk.ApplicationWindow):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
         self.goMain()
-    def goMain(self):
+    def update(self):
         self.main.update()
+    def goMain(self):
+        self.update()
         self.stack.show('main')
     def goEdit(self, baseData=None, then=None):
+        if isinstance(baseData,domain.profile):
+            baseData = self.editor.loadProfFromInput(baseData)
         self.editor.set_entries(baseData, then)
         self.stack.show('editor')
-
 __all__ = [
     window
 ]

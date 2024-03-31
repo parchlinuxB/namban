@@ -1,1 +1,1 @@
-{"profiles": [{"server1": {"type": "dns", "url": "1.1.1.1"}, "name": "cloud flare", "server2": {"type": "dns", "url": "1.0.0.1"}}, {"server1": {"type": "dns", "url": "8.8.8.8"}, "name": "google", "server2": {"type": "dns", "url": "8.8.4.4"}}, {"server1": {"type": "dns", "url": "5.5.5.5"}, "name": "fadgkjlkfgjdlf"}]}
+{"profiles": [{"server1": {"type": "dns", "url": "1.1.1.1"}, "name": "cloud flare", "server2": {"type": "dns", "url": "1.0.0.1"}}, {"server1": {"type": "dns", "url": "8.8.8.8"}, "name": "google", "server2": {"type": "dns", "url": "8.8.4.4"}}]}

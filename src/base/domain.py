@@ -32,3 +32,10 @@ class Model:
                 setattr(
                     self, name, val
                 )
+    def __eq__(self,another):
+        class oooooo1:...
+        class oooooo2:...
+        for f in self._fields:
+            if getattr(self,f.name,oooooo1) != getattr(another,f.name,oooooo2):
+                return False
+        return True
