@@ -28,7 +28,7 @@
     margin-left: 4px;
 }
 .input{
-    min-width:100px;
+    border-radius: 10px;
 }
 .server-informaion{
 
@@ -48,5 +48,41 @@
 .button{
     border: none;
     border-radius: 12px;
-    color: #111;
+}
+.text-lg{
+    font: 16px bolder;
+    
+}
+.titlebar{
+    /* background-color: aqua; */
+}
+.mt-1{
+    margin-top: 5px;
+}
+.mt-2{
+    margin-top: 10px;
+}
+.mt-3{
+    margin-top: 15px;
+}
+.mt-6{
+    margin-top: 30px;
+}
+.mb-1{
+    margin-bottom: 5px;
+}
+.bg-red{
+    /* background-color: #d54; */
+    background: rgb(250, 20, 20);
+    color: azure;
+}
+.bg-red:hover{
+    background: rgb(250, 100, 100);
+}
+.bg-green{
+    background: rgba(53, 167, 8, 0.993);
+    color: azure;
+}
+.bg-green:hover{
+    background: rgb(125, 255, 73);
 }

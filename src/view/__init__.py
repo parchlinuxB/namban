@@ -1,7 +1,9 @@
 from gi.repository import Gdk, Gtk
 import settings
-import domain
+import domain as domain
 from pathlib import Path
+from .textCheck import isIp,baseCheck
+import control
 
 class trashIcon(Gtk.Image):
     def __init__(self):
@@ -20,7 +22,13 @@ class profileConnectButton(Gtk.Switch):
         self.add_css_class('server-button')
 
 class Label(Gtk.Label):
-    def __init__(self,label,classes=[],**more):
+    def __init__(self,label,classes=[],maxChar=None,**more):
+        if maxChar:
+            if label.__len__() > maxChar:
+                if maxChar > 2 : 
+                    label = label[:maxChar-2] + ".."
+                else :
+                    label = label[:maxChar]
         super().__init__(label=label,**more)
         self.set_css_classes(classes+['label'])
 
@@ -31,6 +39,25 @@ class LeftFloat(Gtk.AspectFrame):
             obey_child=True
         )
         self.set_child(widget)
+
+class centerFloat(Gtk.AspectFrame):
+    def __init__(self,widget):
+        super().__init__(
+            halign=Gtk.Align.CENTER,
+            xalign=0.5,
+            yalign=0.5,
+            # ratio=1.0,
+            obey_child=True
+        )
+        self.set_child(widget)
+
+class Fixed(Gtk.Fixed):
+    def __init__(self,classes=[]):
+        super().__init__()
+        self.set_css_classes(classes)
+    def put(self, widget, x, y):
+        super().put(widget, x, y)
+        return self
 
 class profileInformation(Gtk.Fixed):
     def __init__(self,profile:domain.profile):
@@ -51,7 +78,8 @@ class profileInformation(Gtk.Fixed):
             classes=[
                 'color-high',
                 'font-l'
-                ]
+                ],
+            maxChar=11
             )
         serversAspectFrame = Gtk.AspectFrame()
         serversAspectFrame.add_css_class('server-aspect-frame')
@@ -59,7 +87,9 @@ class profileInformation(Gtk.Fixed):
         serversAspectFrame.set_child(
             self.servers
         )
-        for i, serv in enumerate([self.prof.server1,self.prof.server2]):
+        servers = [self.prof.server1]
+        if self.prof.server2: servers.append(self.prof.server2)
+        for i, serv in enumerate(servers):
             self.servers.attach(
                 LeftFloat(
                     Label(
@@ -74,20 +104,31 @@ class profileInformation(Gtk.Fixed):
         )
         self.put(
             serversAspectFrame,
-            60,0
+            80,0
         )
 
 class Button(Gtk.Button):
-    def __init__(self, child, onClick, classes=[],size=None):
+    def __init__(self, child, onClick=lambda*_:... , classes=[],size=None,enable=True):
         super().__init__()
         self.set_child(child)
-        self.set_css_classes(classes+['button'])
+        self.set_css_classes(['button'] + classes)
         # self.set_relief(Gtk.ReliefStyle.NONE)
         if size:
             self.set_size_request(*size)
             self.set_hexpand(False)
             self.set_vexpand(False)
         self.connect('clicked', onClick)
+        self.set_sensitive(enable)
+    def enable_css(self, className):
+        if className not in self.get_css_classes():
+            self.add_css_class(className)
+    def disable_css(self, className):
+        while className in self.get_css_classes():
+            self.remove_css_class(className)
+    def enable(self):
+        self.set_sensitive(True)
+    def disable(self):
+        self.set_sensitive(False)
 
 class profile(Gtk.Box):
     def __init__(self,app:domain.app,profile:domain.profile):
@@ -124,47 +165,148 @@ class profileList(Gtk.Grid):
     def __init__(self, app:domain.app):
         super().__init__()
         self.add_css_class('server-list')
-        for i, p in enumerate(app.data.profiles):
+        self.app = app
+    def update(self):
+        for i, p in enumerate(self.app.data.profiles):
             self.attach(
-                profile(app,p),
+                profile(self.app,p),
                 0,i,1,1
             )
+
 
 class addButton(Gtk.Overlay):
     def __init__(self, app):
         super().__init__()
         self.app = app
-        self.button = Gtk.Button()
-        self.button.set_child(
-            Label('+')
-        )
-        self.button.add_css_class('add-btn')
+        self.button = Button(Label('+'),self.click)
+        self.button.set_css_classes(['add-btn'])
         self.set_child(self.button)
+    def click(self, *_):
+        self.app.window.goEdit(None, lambda data: control.addProfile(
+            domain.profile(
+                server1=domain.server(url=data['serv1'],type='dns'),
+                server2=domain.server(url=data['serv2'],type='dns') if data.get('serv2',False) else None,
+                name=data['name']
+            )
+            ))
 
 class mainWindowContainer(Gtk.Fixed):
     def __init__(self, app):
         super().__init__()
+        self.childs = [profileList(app)]
         self.put(
-            profileList(app),0,0
+            self.childs[0],0,0
         )
         self.put(
             addButton(app),10,350
         )
-        
-class editWindowContainer(Gtk.Fixed):
+    def update(self):
+        for ch in self.childs:
+            ch.update()
+
+
+class Input(Gtk.Entry):
+    def __init__(self,app=None,name="",optional=False,placeholder=None,classes=[],onchange=None,checker=lambda *_:True):
+        super().__init__()
+        self.set_size_request(250,20)
+        self.app = app
+        self.set_css_classes(['input'] + classes)
+        self.name = name
+        self.optional = optional
+        if placeholder:
+            self.set_placeholder_text(placeholder)
+        if onchange:
+            self.connect("changed", onchange)
+        self.checker = checker
+
+class Form:
+    def __init__(self, *inputs:list[Input]) -> None:
+        self.inputs = inputs
+    class LowEntryError(Exception):
+        def __init__(self, *entries):
+            super().__init__()
+            self.inputs = entries
+    def read(self):
+        empties = []
+        for i in self.inputs:
+            i:Input
+            t:str = i.get_text()
+            if t.strip() == '':
+                if not i.optional:
+                    empties.append(i)
+            else:
+                if not i.checker(t):
+                    empties.append(i)
+
+        if empties:
+            raise self.LowEntryError(*empties)
+        return {
+            i.name: i.get_text() for i in self.inputs
+        }
+    def write(self, data:dict):
+        for inp in self.inputs:
+            try:
+                if not data:
+                    inp.set_text("")
+                elif inp.name in data:
+                    inp.set_text(data[inp.name])
+               
+            except:...
+
+class editWindowContainer(Gtk.Box):
     def handleOK (self, *args):
         # self.then(self.data)
         self.app.window.goMain()
-    def update(self, baseData ,then):
-        self.put(
-            Button(
-                Label('0'),self.handleOK
-            ),0,0
-        )
+    def set_entries(self, baseData ,then):
+        self.form.write(baseData)
+        self.then = then
     def __init__(self,app):
-        super().__init__()
+        super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.app = app
-
+        self.inputs = [
+            Input(self.app, "name", onchange=self.update, classes=['mt-6'], placeholder="Name"),
+            Input(self.app, "serv1",onchange=self.update, classes=['mt-2'], checker=isIp(),placeholder="Server 1"),
+            Input(self.app, "serv2",onchange=self.update, classes=['mt-2'], checker=isIp(),placeholder="Server 2 (optional)", optional=True)
+        ]
+        self.form = Form(*self.inputs)
+        for i in self.inputs : self.append(centerFloat(i))
+        self.okbtn = Button(Label("Ok"),self.ok, classes=['mb-1'], enable=False)
+        self.canbtn = Button(Label("Cancel"),self.cancel, classes=['mb-1', 'bg-red'])
+        self.append(
+            centerFloat(
+                Fixed(classes=['mt-3'])
+                    .put(
+                        self.okbtn, 10, 0
+                    )
+                    .put(
+                        self.canbtn, 60, 0
+                    )
+            )
+        )        
+    def update(self,*_):
+        try:
+            data = self.form.read()
+            self.okbtn.enable()
+            self.okbtn.enable_css("bg-green")
+        except Form.LowEntryError as e:
+            self.okbtn.disable()
+            self.okbtn.disable_css("bg-green")
+    def ok(self,*_):
+        try:
+            data = self.form.read()
+            if self.then:
+                self.then(data)
+        except:
+            ...
+        self.set_entries(None, None)
+        self.back()
+ 
+    def cancel(self,*_):
+        self.set_entries(None, None)
+        self.back()
+ 
+    def back(self):
+        self.app.window.goMain()
 
 class Stack(Gtk.Stack):
     def __init__(self,**data):
@@ -183,12 +325,11 @@ class Stack(Gtk.Stack):
         }
         for _, widget in data.items():
             Gtk.Stack.add_child(self,widget)
-        
 
 
 class window(Gtk.ApplicationWindow):
     def __init__(self, app=None):
-        super().__init__(application=app,title=settings.WINDOW_TITLE)
+        super().__init__(application=app, title=settings.WINDOW_TITLE)
         app.window = self
         self.app = app
         self.set_default_size(300,400)
@@ -213,11 +354,12 @@ class window(Gtk.ApplicationWindow):
             cssProvider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-        self.goEdit(None,None)
+        self.goMain()
     def goMain(self):
+        self.main.update()
         self.stack.show('main')
-    def goEdit(self, baseData, then):
-        self.editor.update(baseData, then)
+    def goEdit(self, baseData=None, then=None):
+        self.editor.set_entries(baseData, then)
         self.stack.show('editor')
 
 __all__ = [
