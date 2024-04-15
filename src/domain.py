@@ -20,3 +20,4 @@ class appData:
 class app:
     def __init__(self, data:appData):
         self.data = data
+        self.connectedProfile = None

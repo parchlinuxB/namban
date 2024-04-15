@@ -7,12 +7,14 @@ import settings
 import storage
 import sys
 import control
-class application(Gtk.Application, control.control, storage.storage):
+import core
+class application(Gtk.Application, control.control, storage.storage, core.core):
     def __init__(self):
         Gtk.Application.__init__(self,
             application_id=settings.PACKAGE_NAME
         )
         self.connect('activate', self.activate)
+        self.connectedProfile = None
 
     @property
     def data(self):
@@ -22,7 +24,11 @@ class application(Gtk.Application, control.control, storage.storage):
         win = window(app=self)
         win.present()
 
-sys.exit(
-    application()
-    .run([])
-)
+def main(uid) :
+    with open('/test',"w") as f:
+        f.write('success')
+    
+    sys.exit(
+        application()
+        .run([])
+    )

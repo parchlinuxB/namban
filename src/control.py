@@ -22,3 +22,10 @@ class control:
         data = self.read()
         data.profiles[indexOfProf(data.profiles,p)] = newp
         self.write(data)
+    def connectProfile(self, profile:domain.profile):
+        self.connectedProfile = profile
+        self.systemDnsSet(profile)
+        self.window.update()
+    def disconnectProfiles(self):
+        self.connectedProfile = None
+        self.systemDnsSet(None)

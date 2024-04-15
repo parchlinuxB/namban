@@ -1,3 +1,5 @@
+# In the name of god
+
 from gi.repository import Gdk, Gtk
 import settings
 import domain as domain
@@ -16,9 +18,19 @@ class pencilIcon(Gtk.Image):
         self.set_from_icon_name("draw-freehand")
 
 class profileConnectButton(Gtk.Switch):
-    def __init__(self, app:domain.app, profile:domain.profile):
+    def __init__(self, app:domain.app, profile:domain.profile, default=False):
         super().__init__()
+        self.app = app
+        self.domain = profile
         self.add_css_class('server-button')
+        self.set_state(default)
+        self.connect("state-set", self.onChange)
+    def onChange(self, _, state):
+        if state:
+            self.app.connectProfile(self.domain)
+        else:
+            self.app.disconnectProfiles()
+    
 
 class Label(Gtk.Label):
     def __init__(self,label,classes=[],maxChar=None,**more):
@@ -135,11 +147,13 @@ class profile(Gtk.Box):
         self.add_css_class('server')
         self.fixed = Gtk.Fixed()
         self.app = app
+        self.domain = profile
         self.append(
             self.fixed
         )
+        self.connectButton = profileConnectButton(app,profile)
         self.fixed.put(
-            profileConnectButton(app,profile),
+            self.connectButton,
             235,4
         )
         self.fixed.put(
@@ -147,7 +161,7 @@ class profile(Gtk.Box):
                 trashIcon(),lambda *_:self.app.deleteProfile(profile),[]
             )
             ,
-            190,0
+            189,0
         )
         self.fixed.put(
             Button(
@@ -159,6 +173,11 @@ class profile(Gtk.Box):
         self.fixed.put(
             profileInformation(profile),
             10,0
+        )
+        self.update()
+    def update(self):
+        self.connectButton.set_state(
+            self.app.connectedProfile == self.domain
         )
 
 class Grid(Gtk.Grid):
@@ -172,14 +191,32 @@ class profileList(Grid):
         super().__init__()
         self.add_css_class('server-list')
         self.app = app
-    def update(self):
-        self.remove_column(0)
+        self.profs = []
+        self.start()
+
+    def start(self):
         for i, p in enumerate(self.app.data.profiles):
+            prof = profile(self.app,p)
+            self.profs.append(prof)
             self.attach(
-                profile(self.app,p),
+                prof,
                 0,i,1,1
             )
+    
+    def restart(self):
+        self.remove_column(0)
+        self.profs = []
+        self.start()
 
+    def update(self):
+        for current in self.profs:
+            if current.domain not in self.app.data.profiles:
+                self.restart()
+        for featue in self.app.data.profiles:
+            if featue not in list(map(lambda x:x.domain, self.profs)):
+                self.restart()
+        for ch in self.profs:
+            ch.update()
 
 class addButton(Gtk.Overlay):
     def __init__(self, app):
