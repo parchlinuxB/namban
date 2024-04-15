@@ -5,4 +5,10 @@ class resolved(base_promise):
     def __init__(self, path="",**d):
         super().__init__(path=path,**d)
     def handle(self):
-        os.replace(self.path, "/etc/systemd/resolved.conf")
+        os.system(f'mv {self.path} /etc/systemd/resolved.conf')
+class resolv_conf(base_promise):
+    fields = ['path']
+    def __init__(self, path="",**d):
+        super().__init__(path=path,**d)
+    def handle(self):
+        os.system(f'mv {self.path} /etc/resolv.conf')
