@@ -13,6 +13,6 @@ if not os.path.exists(settings.SOCKET_PATH):
 uid = os.getuid()
 
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-sock.connect(settings.SOCKET_PATH)
+sock.connect(settings.SOCKET_PATH.__str__())
 sock.sendall(b"\x04\x00"+bytes(str(uid),"UTF-8"))
 sock.close()

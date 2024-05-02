@@ -25,10 +25,5 @@ class application(Gtk.Application, control.control, storage.storage, core.core):
         win.present()
 
 def main(uid) :
-    with open('/test',"w") as f:
-        f.write('success')
-    
-    sys.exit(
-        application()
-        .run([])
-    )
+    return application().run([])
+
