@@ -23,7 +23,7 @@ class resolvd(base_strategy):
 nameserver 127.0.0.53
 '''.strip()
             os.system(
-                f"cp /etc/resolv.conf {settings.APP_FILES_PATH/'oldconffiles/resolv.conf'} -r"
+                "cp /etc/resolv.conf " + str(settings.APP_FILES_PATH/'oldconffiles/resolv.conf') + " -r"
             )
             with open('/etc/resolv.conf', 'w+') as f:
                 f.write(resolvconffile)
@@ -43,7 +43,7 @@ DNS={profile.server1.url}
         return c
     def connect(self):
         self.check4resovConfFile()
-        os.system(f"cp /etc/systemd/resolved.conf {settings.APP_FILES_PATH/'oldconffiles/resolved.conf'} -r")
+        os.system(f"cp /etc/systemd/resolved.conf "+str(settings.APP_FILES_PATH/'oldconffiles/resolved.conf') + " -r")
         with open("/etc/systemd/resolvd.conf",'w+') as f:
             f.write(
                 self.generateResolvdConf()
