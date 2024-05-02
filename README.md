@@ -11,3 +11,10 @@ It doesn't contain any release yet, for try it you may use a develop environment
 1. python > 3.10
 2. Gtk > 4.10
 3. PyGObject
+
+## Run guide 
+
+1. start daemon.py as root
+```sudo python daemon.py```
+2. use startnamban.py
+```python startnamban.py```
