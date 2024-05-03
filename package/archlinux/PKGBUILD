@@ -1,0 +1,32 @@
+pkgname=namban
+pkgver=0.1
+pkgrel=1
+pkgdesc="use custom dns has never been hard"
+arch=('any')
+url="https://github.com/parchlinuxb/namban"
+license=("GPL-3.0")
+depends=("python>=3.10.0" "python-gobject" "gtk4")
+source=("namban-source.zip")
+sha256sums=('SKIP')
+
+build(){
+    echo deleting usless files
+    rm -r src/**/__pycache__
+}
+
+package() {
+    mv src bin -f
+    rm -rf bin/**/__pycache__
+    mkdir -p $pkgdir/usr/share/namban
+    cp -r bin $pkgdir/usr/share/namban/
+    mkdir -p $pkgdir/usr/bin
+    echo \#!/bin/bash >> $pkgdir/usr/bin/namban
+    echo python /usr/share/namban/bin/startnamban.py >> $pkgdir/usr/bin/namban
+    echo \#!/bin/bash >> $pkgdir/usr/bin/namband
+    echo python /usr/share/namban/bin/daemon.py >> $pkgdir/usr/bin/namband
+    chmod +x $pkgdir/usr/bin/namband
+    chmod +x $pkgdir/usr/bin/namban
+    mkdir -p $pkgdir/etc/systemd/system
+    cp systemd/* $pkgdir/etc/systemd/system
+    echo $srcdir
+}

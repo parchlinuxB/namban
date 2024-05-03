@@ -7,7 +7,7 @@ class base_promise:
         for name, v in d.items():
             setattr(self,name,v)
         dist = self.dump2file()
-        fp = settings.PROMISES_PATH/f"{hashlib.sha256(bytes(dist,"UTF-8"))}.promise"
+        fp = settings.PROMISES_PATH/(hashlib.sha256(bytes(dist,"UTF-8")).hexdigest() + ".promise")
         self.filePath = fp
         f = open(fp, "w+")
         f.write(
