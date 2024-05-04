@@ -11,8 +11,9 @@ if not os.path.exists(settings.SOCKET_PATH):
 
 
 uid = os.getuid()
+display = os.environ.get('DISPLAY')
 
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 sock.connect(settings.SOCKET_PATH.__str__())
-sock.sendall(b"\x04\x00"+bytes(str(uid),"UTF-8"))
+sock.sendall(b"\x04\x00\x01"+bytes(str(uid),"UTF-8")+b"\x01\x02"+bytes(display,"UTF-8")+b"\x02\x00")
 sock.close()

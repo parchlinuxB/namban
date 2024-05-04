@@ -9,24 +9,28 @@ def isSocketOpen(socketPath):
     except OSError:
         return os.path.exists(socketPath)
 
-def runApp(uid):
+def runApp(req):
     f = open(settings.APP_LOCK_PATH, "w+")
     f.write(str(os.getpid()))
     f.close()
     err = 1
+    if 'uid' in req: ...
+        # os.setuid(int(req['uid'])) 
+    if 'display' in req :
+        os.environ['DISPLAY'] = req['display']
     try:
         import application
-        err = application.main(uid)
+        err = application.main()
     finally:
         os.remove(settings.APP_LOCK_PATH)
         sys.exit(err)
-def startApp(uid):
+def startApp(req):
     if os.path.exists(settings.APP_LOCK_PATH):
         pid = open(settings.APP_LOCK_PATH,'r').read().strip()
         print("Application already is running in pid: "+pid, file=sys.stderr)
         return False
     import multiprocessing as mp
-    mp.Process(target=lambda:runApp(uid)).start()
+    mp.Process(target=lambda:runApp(req)).start()
     return True
 import re
 import json
@@ -52,6 +56,34 @@ def checkPaths():
     for p in settings._imps:
         makSure(p)
 
+def parseRequest(bin):
+    dic = {
+        b"\x01":"uid",
+        b"\x02":"display"
+    }
+    req = {}
+    corsur = None
+    iter = 0
+    while True:
+        try:
+            l = bin[iter:iter+1]
+            if l == b"\x00":
+                break
+            if corsur :
+                if l != corsur:
+                    req[dic[corsur]] = req.get(dic[corsur],'') + l.decode()
+                else:
+                    corsur = None
+            else :
+                if l in dic:
+                    corsur = l
+        except Exception as e:
+            break
+        finally:
+            iter += 1
+    return req
+
+
 def daemon():
     checkPaths()
     checkPromises()
@@ -69,19 +101,19 @@ def daemon():
         conn, addr = sock.accept()
         try:
             data = conn.recv(16)
-            print(data)
             if data[:1] == b"\x04":
                 print("new connection:")
                 if data[1:2] == b"\x00":
                     print("    start app")
-                    uid = data[2:]
-                    uid = uid.decode()
-                    print("    uid: "+uid)
-                    uid = int(uid)
-                    if startApp(uid):
-                        print('    app started')
-                    else:
-                        print('    launch app failed')
+                    try:
+                        req = parseRequest(data[2:])
+                        print(req)
+                        if startApp(req):
+                            print('    app started')
+                        else:
+                            print('    launch app failed')
+                    except:
+                        print('bad request!')
                 print('close connection')
         finally:
             conn.close()

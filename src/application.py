@@ -24,6 +24,6 @@ class application(Gtk.Application, control.control, storage.storage, core.core):
         win = window(app=self)
         win.present()
 
-def main(uid) :
+def main() :
     return application().run([])
 
