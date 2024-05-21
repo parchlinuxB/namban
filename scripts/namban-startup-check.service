@@ -4,9 +4,9 @@ After=network.target auditd.service
 Documentation=https://github.com/parchlinuxb/namban
 
 [Service]
-ExecStart=/usr/bin/namband
+ExecStart=/usr/lib/namban/namban-startup-check
 User=root
-WorkingDirectory=/usr/share/namban/bin
+WorkingDirectory=/usr/lib/namban/src
 
 # Kill root process
 KillMode=process

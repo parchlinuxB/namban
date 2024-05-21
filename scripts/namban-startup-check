@@ -1,0 +1,6 @@
+#!/bin/bash
+# Name: namban-startup-check
+# Porpuse: check if namban has shuted down currectly? 
+# IF NOT it will resume process of shutting down
+# Path: /usr/lib/namban/
+/usr/bin/python3 /usr/lib/namban/src/check.py

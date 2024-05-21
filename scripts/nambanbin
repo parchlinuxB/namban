@@ -1,0 +1,5 @@
+#!/bin/bash
+# Name: nambanbin
+# Porpuse: run the numban
+# Path: /usr/lib/namban/
+/usr/bin/python3 /usr/lib/namban/src/namban.py
