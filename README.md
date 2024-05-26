@@ -1,10 +1,10 @@
-# NS MAN
+# NAMBAN
 
 A simple gui tool for set dns settings based on GTK4, related to [parchlinux project](https://github.com/parchlinux/)
 
 ## run
 
-It doesn't contain any release yet, for try it you may use a develop environment
+It doesn't released in any repository yet, for try it you may use archlinux pkgbuild in package/archlinux or use a develop environment
 
 ## develop environment
 
@@ -12,9 +12,6 @@ It doesn't contain any release yet, for try it you may use a develop environment
 2. Gtk > 4.10
 3. PyGObject
 
-## Run guide 
-
-1. start daemon.py as root
-```sudo python daemon.py```
-2. use startnamban.py
-```python startnamban.py```
+## To Do
+- [ ] Make a Icon! (are you good at drawing? help please)
+- [ ] Fix text color in darkmode
