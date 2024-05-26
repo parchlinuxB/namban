@@ -11,6 +11,7 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 1. python > 3.10
 2. Gtk > 4.10
 3. PyGObject
+4. A glass of milk for mental peace
 
 ## To Do
 - [ ] Make a Icon! (are you good at drawing? help please) HUSS, are you seeing this? when you want do it mother fucker !
