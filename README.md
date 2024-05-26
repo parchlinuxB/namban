@@ -15,4 +15,4 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 ## To Do
 - [ ] Make a Icon! (are you good at drawing? help please)
 - [ ] Fix text color in darkmode
-- [ ] Send me to therapy !!
+- [ ] Send maintainer to therapy !!
