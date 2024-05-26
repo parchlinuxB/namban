@@ -13,7 +13,7 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 3. PyGObject
 
 ## To Do
-- [ ] Make a Icon! (are you good at drawing? help please) HUSS, are you seeing this? do it mother fucker !
+- [ ] Make a Icon! (are you good at drawing? help please) HUSS, are you seeing this? when you want do it mother fucker !
 - [x] Fix text color in darkmode
 - [ ] Send maintainer to therapy !!
 - [ ] publish in AUR
