@@ -389,9 +389,11 @@ class Stack(Gtk.Stack):
         for _, widget in data.items():
             Gtk.Stack.add_child(self,widget)
 
-
+import time
 class window(Gtk.ApplicationWindow):
     def __init__(self, app=None):
+        while not Gtk.init_check():
+            time.sleep(0.1)
         super().__init__(application=app, title=settings.WINDOW_TITLE)
         app.window = self
         self.app = app

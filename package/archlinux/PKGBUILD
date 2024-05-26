@@ -16,14 +16,8 @@ build(){
 
 package() {
     find . -type d -name "__pycache__" -exec rm -rf {} +
-    mkdir -p $pkgdir/usr/lib/namban
-    mkdir -p $pkgdir/usr/bin
-    mkdir -p $pkgdir/etc/systemd/system
+    cp -r files/* $pkgdir
     cp -r src $pkgdir/usr/lib/namban/
-    cp scripts/namban $pkgdir/usr/bin/
-    cp scripts/nambanbin $pkgdir/usr/lib/namban/
-    cp scripts/namban-startup-check $pkgdir/usr/lib/namban/
-    cp scripts/*.service $pkgdir/etc/systemd/system
     chmod +x $pkgdir/usr/bin/namban
     chmod +x $pkgdir/usr/lib/namban/nambanbin
     chmod +x $pkgdir/usr/lib/namban/namban-startup-check

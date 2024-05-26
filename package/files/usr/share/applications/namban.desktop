@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Namban
+Name[fa]=نام بان
+GenericName=DNS Manager
+GenericName[fa]=تغییر دهتده DNS
+X-GNOME-FullName=Namban DNS Manager
+Comment=Change DNS server
+Comment[fa]=نمونه DNS را عوض کنید
+Exec=/usr/bin/namban %f
+Icon=namban
+Terminal=false
+Type=Application
+Categories=parchlinux;System;DNS;
+Keywords=DNS;
+StartupNotify=true
