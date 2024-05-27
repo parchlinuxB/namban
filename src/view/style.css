@@ -71,6 +71,9 @@
 .mb-1{
     margin-bottom: 5px;
 }
+.ml-abit{
+    margin-left: 3px;
+}
 .bg-red{
     /* background-color: #d54; */
     background: rgb(250, 20, 20);

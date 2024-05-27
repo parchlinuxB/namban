@@ -94,7 +94,11 @@ class profileInformation(Gtk.Fixed):
             )
         serversAspectFrame = Gtk.AspectFrame()
         serversAspectFrame.add_css_class('server-aspect-frame')
-        self.servers = Gtk.Grid()
+        self.servers = Grid(
+            classes=[
+                'ml-abit'
+            ]
+        )
         serversAspectFrame.set_child(
             self.servers
         )
@@ -182,6 +186,9 @@ class profile(Gtk.Box):
         )
 
 class Grid(Gtk.Grid):
+    def __init__(self,*args,classes=[],**wargs):
+        super().__init__(*args,**wargs)
+        self.set_css_classes(classes)
     def empty (self):
         children = self.get_children()
         for child in children:
