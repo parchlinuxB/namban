@@ -5,7 +5,7 @@
                 "type": "dns", 
                 "url": "1.1.1.1"
             }, 
-            "name": "cloud flare", 
+            "name": "debug mode", 
             "server2": {
                 "type": "dns", 
                 "url": "1.0.0.1"
