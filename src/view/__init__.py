@@ -105,7 +105,8 @@ class profileInformation(Gtk.Fixed):
                 LeftFloat(
                     Label(
                         f'{i+1}: {str(serv)}',
-                        classes=['font-s','color-low']
+                        classes=['font-s','color-low'],
+                        maxChar=11
                     )
                 ),0,i,1,1
             )
