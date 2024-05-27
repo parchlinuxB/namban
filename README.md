@@ -14,7 +14,7 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 4. A glass of milk for mental peace
 
 ## To Do
-- [x] Make a Icon! Thanks HUSS because Icon
+- [x] Make a Icon! ( Thanks HUSS because Icon )
 - [x] Fix text color in darkmode
 - [ ] Send maintainer to therapy !!
 - [ ] publish in parch repos
