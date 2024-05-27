@@ -3,4 +3,4 @@
 # Porpuse: run the numban
 # Path: /usr/lib/namban/
 cd /usr/lib/namban/src
-/usr/bin/python3 /usr/lib/namban/src/namban.py
+/usr/bin/python3 /usr/lib/namban/src/namban.py --release
