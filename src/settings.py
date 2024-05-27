@@ -1,5 +1,5 @@
 import sys
-DEBUG = 'release' not in sys.argv
+DEBUG = '--release' not in sys.argv
 
 _imps = []
 def makeSureExists(p):
