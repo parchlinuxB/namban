@@ -16,9 +16,10 @@ build(){
 
 package() {
     find . -type d -name "__pycache__" -exec rm -rf {} +
-    cp -r files/* $pkgdir
+    cp -r rootfs/* $pkgdir
     cp -r src $pkgdir/usr/lib/namban/
     chmod +x $pkgdir/usr/bin/namban
     chmod +x $pkgdir/usr/lib/namban/nambanbin
     chmod +x $pkgdir/usr/lib/namban/namban-startup-check
+    chmod 644 $pkgdir/usr/share/polkit-1/actions/com.parchlinux.namban.policy
 }

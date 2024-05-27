@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
-  <vendor>The GParted Project</vendor>
-  <vendor_url>https://gparted.org</vendor_url>
+  <vendor>The Namban Project</vendor>
+  <vendor_url>https://parchlinux.com</vendor_url>
   <icon_name>gparted</icon_name>
-  <action id="org.gnome.gparted">
-    <description>Run GParted as root</description>
+  <action id="com.parchlinux.namban">
+    <description>Run Namban as root</description>
     <description xml:lang="fa">اجرای نام بان با دسترسی ریشه</description>
     <message>Authentication is required to run the Namban DNS manager as root</message>
     <message xml:lang="fa">نام بان برای دسترسی به تنظیمات سیستم نیاز به راستی آزمایی دارد</message>
