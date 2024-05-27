@@ -54,7 +54,7 @@ class storage:
         try:
             with open(settings.APP_DATA_FILE,"w+") as f:
                 f.write(
-                    json.dumps(rawData)
+                    json.dumps(rawData, indent=4)
                 )
         except:
             report.DataFile.InvalidFile()
