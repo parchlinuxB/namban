@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Packages via Pacman
-        run: pacman -Sy; pacman --noconfirm -S librsvg unzip zip
+        run: pacman -Sy; pacman --noconfirm -S pango glib2 librsvg unzip zip
       - name: Make Package
         run: cd package/archlinux; bash build.sh
       - name: Upload zst file to the release
