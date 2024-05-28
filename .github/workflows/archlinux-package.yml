@@ -35,5 +35,6 @@ jobs:
          su builder -c "bash build.sh"
       - name: Upload zst file to the release
         run: |
+          echo $(ls)
           cd ./build
           gh release upload ${{ github.event.release.tag_name }} ./namban*zst -R ${{ github.repository }}
