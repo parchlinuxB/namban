@@ -23,7 +23,7 @@ jobs:
       - name: Install Packages via Pacman
         run: |
          pacman -Sy 
-         pacman --noconfirm -S base-devel pango glib2 librsvg unzip zip fakeroot
+         pacman --noconfirm -S base-devel pango glib2 librsvg unzip zip fakeroot python python-gobject gtk4
          useradd -m builder
          passwd -d builder
          echo 'builder ALL=(ALL) NOPASSWD: ALL' | tee /etc/sudoers.d/builder
