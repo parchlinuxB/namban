@@ -1,11 +1,11 @@
 pkgname=namban
-pkgver=0.2
-pkgrel=1
+pkgver=0.3
+pkgrel=3
 pkgdesc="use custom dns has never been hard"
 arch=('any')
 url="https://github.com/parchlinuxb/namban"
 license=("GPL-3.0")
-depends=("python>=3.10.0" "python-gobject" "gtk4")
+dependsat11=("python>=3.10.0" "python-gobject" "gtk4")
 source=("namban-source.zip")
 sha256sums=('SKIP')
 
