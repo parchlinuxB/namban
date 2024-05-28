@@ -1,0 +1,30 @@
+# This workflow will build a pacman package from namban
+name: package namban for pacman
+on:
+  release:
+    types:
+      - created
+
+env:
+  api_key: ${{ secrets.GITHUB_TOKEN }}
+  name: ${{ github.event.repository.name }}
+  release_name: ${{ github.ref_name }}
+  GH_TOKEN: ${{ github.token }}
+jobs:
+  build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Packages via Pacman
+        run: pacman -Sy; pacman --noconfirm -S librsvg unzip zip
+      - name: Make Package
+        run: cd package/archlinux; bash build.sh
+      - name: Upload zst file to the release
+        run: |
+          cd ./build
+          gh release upload ${{ github.event.release.tag_name }} ./namban*zst -R ${{ github.repository }}
