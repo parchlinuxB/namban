@@ -26,13 +26,13 @@ jobs:
          pacman --noconfirm -S base-devel pango glib2 librsvg unzip zip fakeroot
          useradd -m builder
          passwd -d builder
-         echo 'builder ALL=(ALL) NOPASSWD: ALL' | sudo tee /etc/sudoers.d/builder
-         sudo chown -R builder:builder $GITHUB_WORKSPACE
+         echo 'builder ALL=(ALL) NOPASSWD: ALL' | tee /etc/sudoers.d/builder
+         chown -R builder:builder $GITHUB_WORKSPACE
 
       - name: Make Package
         run: |
          cd package/archlinux
-         sudo -u builder bash build.sh
+         su builder -c "builder bash build.sh"
       - name: Upload zst file to the release
         run: |
           cd ./build
