@@ -3,4 +3,5 @@
 # Porpuse: check if namban has shuted down currectly? 
 # IF NOT it will resume process of shutting down
 # Path: /usr/lib/namban/
+# NOTE: This file should execute as root and normaly calls by systemd in startup
 /usr/bin/python3 /usr/lib/namban/src/check.py
