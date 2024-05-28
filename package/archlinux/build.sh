@@ -22,7 +22,7 @@ main () {
     cd ../archlinux || return
     cp PKGBUILD build
     cd build || return
-    makepkg -sc --asroot
+    su nobody -c "makepkg -sc"
 }
 
 main
