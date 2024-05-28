@@ -44,7 +44,7 @@ DNS={profile.server1.url}
     def connect(self):
         self.check4resovConfFile()
         os.system(f"cp /etc/systemd/resolved.conf "+str(settings.APP_FILES_PATH/'oldconffiles/resolved.conf') + " -r")
-        with open("/etc/systemd/resolvd.conf",'w+') as f:
+        with open("/etc/systemd/resolved.conf",'w+') as f:
             f.write(
                 self.generateResolvdConf()
             )
