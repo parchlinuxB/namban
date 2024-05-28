@@ -36,5 +36,5 @@ jobs:
       - name: Upload zst file to the release
         run: |
           echo $(ls)
-          cd ./build
+          cd $GITHUB_WORKSPACE/package/archlinux/build
           gh release upload ${{ github.event.release.tag_name }} ./namban*zst -R ${{ github.repository }}
