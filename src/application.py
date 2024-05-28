@@ -8,6 +8,7 @@ import storage
 import sys
 import control
 import core
+import checks
 class application(Gtk.Application, control.control, storage.storage, core.core):
     def __init__(self):
         Gtk.Application.__init__(self,
@@ -23,6 +24,11 @@ class application(Gtk.Application, control.control, storage.storage, core.core):
     def activate(self,*args):
         win = window(app=self)
         win.present()
+    
+    def run(self,*d,**dd):
+        super().run(*d,**dd)
+        self.disconnectProfiles()
+
 
 def main() :
     return application().run([])

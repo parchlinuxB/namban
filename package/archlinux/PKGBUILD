@@ -1,5 +1,5 @@
 pkgname=namban
-pkgver=0.1
+pkgver=0.2
 pkgrel=1
 pkgdesc="use custom dns has never been hard"
 arch=('any')
