@@ -23,6 +23,7 @@ main () {
     cp PKGBUILD build
     cd build || return
     makepkg -sc
+    cd ..
 }
 
 main
