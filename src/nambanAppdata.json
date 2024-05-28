@@ -1,4 +1,9 @@
 {
+    "--comment": [
+        "This file is only for debug, effective one stored in:",
+        "package/files/rootfs/etc/namban/config.json",
+        "See also src/settings.py Line 13 dear aligholipour :)"
+    ],
     "profiles": [
         {
             "server1": {
