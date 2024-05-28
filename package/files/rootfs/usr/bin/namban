@@ -1,40 +1,7 @@
 #!/bin/sh
-#     Name:  gparted
-#  Purpose:  Perform appropriate startup of GParted executable gpartedbin.
-#
-#            The purpose of these startup methods is to prevent
-#            devices from being automounted, and to ensure only one
-#            instance of GParted is running.  File system problems can
-#            occur if devices are mounted prior to the completion of
-#            GParted's operations, or if multiple partition editing
-#            tools are in use concurrently.
-#
-# Copyright (C) 2008, 2009, 2010, 2013, 2015 Curtis Gedak
-#
-#  This file is part of GParted.
-#
-#  GParted is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  GParted is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with GParted.  If not, see <http://www.gnu.org/licenses/>.
-#
-
-#
-#  Only permit one instance of GParted to execute at a time
-#
-if pidof nambanbin 1> /dev/null; then
-	echo "The process nambanbin is already running."
-	echo "Only one nambanbin process is permitted."
-	exit 1
-fi
+# First I sould say I copied this file from gparted and only replaced add gparteds by namban !
+#     Name:  namban
+#  Purpose:  Perform appropriate startup of namban executable nambanbin.
 
 #
 #  Define base command for executing GParted
