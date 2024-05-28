@@ -19,5 +19,6 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 - [x] Send maintainer to therapy ( Done by sohrab and HUSS )
 - [x] publish in parch repos ( Done by sohrab )
 - [ ] publish in AUR
-- [X] Add build file for debian
+- [X] Add build file for debian ( Done by ARS101 )
+- [ ] Create a CI/CD 4 debian
 - [ ] Add build file for redhat
