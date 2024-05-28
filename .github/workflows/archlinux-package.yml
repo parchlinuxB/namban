@@ -32,7 +32,7 @@ jobs:
       - name: Make Package
         run: |
          cd package/archlinux
-         su builder -c "builder bash build.sh"
+         su builder -c "bash build.sh"
       - name: Upload zst file to the release
         run: |
           cd ./build
