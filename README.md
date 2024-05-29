@@ -22,3 +22,6 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 - [X] Add build file for debian ( Done by ARS101 )
 - [ ] Create a CI/CD 4 debian
 - [ ] Add build file for redhat
+- [ ] Error Message for wrong input [#5](https://github.com/parchlinuxB/namban/issues/5)
+## Far To Do
+- [ ] DoH & DoT support
