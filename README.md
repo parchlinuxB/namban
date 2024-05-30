@@ -20,7 +20,7 @@ It doesn't released in any repository yet, for try it you may use archlinux pkgb
 - [x] publish in parch repos ( Done by sohrab )
 - [ ] publish in AUR
 - [X] Add build file for debian ( Done by ARS101 )
-- [ ] Create a CI/CD 4 debian
+- [X] Create a CI/CD 4 debian ( Done by ARS101 )
 - [ ] Add build file for redhat
 - [ ] Error Message for wrong input [#5](https://github.com/parchlinuxB/namban/issues/5)
 ## Far To Do
