@@ -2,7 +2,7 @@
 
 
 pkgname="namban"
-pkgver="0.2"
+pkgver="0.3-1"
 arch="amd64"
 maintainer="meshya, D3F4U1T"
 pkgdesc="A simple gui tool for set dns settings."
