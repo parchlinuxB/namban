@@ -1,19 +1,36 @@
 #!/bin/bash
 
+set -x
 
 pkgname="namban"
-pkgver="0.3-1"
 arch="amd64"
 maintainer="meshya, D3F4U1T"
 pkgdesc="A simple gui tool for set dns settings."
-pkgdir="$(pwd)"/"$pkgname"_"$pkgver"_"$arch"
-srcdir="$(pwd)/namban"
+srcdir="$(pwd)/$pkgname"
+depends=(
+	"python3"
+	"gir1.2-gtk-4.0"
+	"python3-gi"
+)
+makedepends=(
+	"git"
+)
 
 # TODO: Add the dependencies
 # TODO: Create a CI/CD workflow to auto build the package
 
+pkgver_func() {
+	cd "$srcdir"
+	git describe --no-abbrev --tags | sed 's/v//g'
+	cd ..
+}
+
 prepare() {
-	git clone -b "v$pkgver" --depth=1 "https://github.com/parchlinuxB/namban"
+	apt install "${makedepends[@]}" -y
+	apt install "${depends[@]}" -y
+	git clone "https://github.com/parchlinuxB/namban"
+	pkgver="$(pkgver_func)"
+	pkgdir="$(pwd)"/"$pkgname"_"v$pkgver"_"$arch"
 }
 
 package() {
