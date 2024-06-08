@@ -6,7 +6,7 @@ pkgname="namban"
 arch="amd64"
 maintainer="meshya, D3F4U1T"
 pkgdesc="A simple gui tool for set dns settings."
-srcdir="$(pwd)/$pkgname"
+srcdir="$(pwd)"
 depends=(
 	"python3"
 	"gir1.2-gtk-4.0"
@@ -16,20 +16,10 @@ makedepends=(
 	"git"
 )
 
-# TODO: Add the dependencies
-# TODO: Create a CI/CD workflow to auto build the package
-
-pkgver_func() {
-	cd "$srcdir"
-	git describe --no-abbrev --tags | sed 's/v//g'
-	cd ..
-}
-
 prepare() {
 	apt install "${makedepends[@]}" -y
 	apt install "${depends[@]}" -y
-	git clone "https://github.com/parchlinuxB/namban"
-	pkgver="$(pkgver_func)"
+	pkgver="$(echo "$REL_TAGNAME" | sed 's/v//g')"
 	pkgdir="$(pwd)"/"$pkgname"_"v$pkgver"_"$arch"
 }
 
@@ -38,10 +28,14 @@ package() {
 	cp -r "$srcdir/package/files/rootfs/"{usr,etc} "$pkgdir/"
 	cp -r "$srcdir/src/" "$pkgdir/usr/lib/namban/src/"
 
+	depends_str="${depends[*]}"
+	depends_str="${depends_str// /, }"
+
 	echo "Package: $pkgname
 	Version: $pkgver
 	Architecture: $arch
 	Maintainer: $maintainer
+	Depends: $depends_str
 	Description: $pkgdesc" | tr -d '\t' > "$pkgdir/DEBIAN/control"
 
 	chmod +x "$pkgdir/usr/"{bin/namban,lib/namban/{nambanbin,namban-startup-check}}
@@ -49,11 +43,5 @@ package() {
 	dpkg-deb --build --root-owner-group "$pkgdir"
 }
 
-cleanup() {
-	rm -rf "$pkgdir"
-	rm -rf "$srcdir"
-}
-
 prepare
 package
-cleanup
