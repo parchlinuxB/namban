@@ -2,9 +2,13 @@
 
 A simple gui tool for set dns settings based on GTK4, related to [parchlinux project](https://github.com/parchlinux/)
 
+![Screenshot from 2024-06-08 14-46-43](https://github.com/parchlinuxB/namban/assets/59795638/fbc47281-d036-4623-8305-027a45f8504a)
+
+![Screenshot from 2024-06-08 14-46-56](https://github.com/parchlinuxB/namban/assets/59795638/22e368c0-6277-4689-b39b-8dd4c961441e)
+
 ## run
 
-It doesn't released in any repository yet, for try it you may use archlinux pkgbuild in package/archlinux or use a develop environment
+It not released in a poppular repository yet, to use it you may use parchlinux repositories `pacman -S namban` or download package files from release page, or use a develpment environment.
 
 ## develop environment
 
