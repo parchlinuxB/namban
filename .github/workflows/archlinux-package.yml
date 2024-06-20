@@ -19,10 +19,10 @@ jobs:
       image: archlinux:latest
       options: --privileged
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Packages via Pacman
         run: |
-         pacman -Sy 
+         pacman -Sy
          pacman --noconfirm -S base-devel pango glib2 librsvg unzip zip fakeroot python python-gobject gtk4 github-cli
          useradd -m builder
          passwd -d builder

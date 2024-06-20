@@ -14,7 +14,7 @@ jobs:
       image: debian:12
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install gh-cli
         run: |
           apt update
