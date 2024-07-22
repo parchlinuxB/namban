@@ -25,7 +25,7 @@ It not released in a poppular repository yet, to use it you may use parchlinux r
 - [ ] publish in AUR
 - [X] Add build file for debian ( Done by ARS101 )
 - [X] Create a CI/CD 4 debian ( Done by ARS101 )
-- [ ] Add build file for redhat
+- [X] Add build file for redhat ( Done by sohrab )
 - [ ] Error Message for wrong input [#5](https://github.com/parchlinuxB/namban/issues/5)
 ## Far To Do
 - [ ] DoH & DoT support
