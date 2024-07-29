@@ -25,7 +25,7 @@ prepare() {
 
 package() {
 	mkdir -p "$pkgdir/"{DEBIAN,'usr/'}
-	cp -r "$srcdir/package/files/rootfs/"{usr,etc} "$pkgdir/"
+	cp -r "$srcdir/package/files/rootfs/"{usr,etc,lib} "$pkgdir/"
 	cp -r "$srcdir/src/" "$pkgdir/usr/lib/namban/src/"
 
 	depends_str="${depends[*]}"
