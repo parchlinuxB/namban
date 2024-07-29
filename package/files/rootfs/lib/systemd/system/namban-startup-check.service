@@ -1,21 +1,13 @@
 [Unit]
-Description=Namban daemon
+Description=Namban startup check
 After=network.target auditd.service
 Documentation=https://github.com/parchlinuxb/namban
 
 [Service]
+Type=oneshot
 ExecStart=/usr/lib/namban/namban-startup-check
 User=root
 WorkingDirectory=/usr/lib/namban/src
-
-# Kill root process
-KillMode=process
-
-# Wait up to 30 minutes for service to start/stop
-TimeoutSec=2
-
-# Restart on non-successful exits.
-Restart=on-failure
 
 
 [Install]
