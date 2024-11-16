@@ -1,6 +1,6 @@
 pkgname=namban
 pkgver=0.3
-pkgrel=5
+pkgrel=6
 pkgdesc="use custom dns has never been hard"
 arch=('any')
 url="https://github.com/parchlinuxb/namban"
