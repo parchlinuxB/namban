@@ -29,3 +29,7 @@ It not released in a poppular repository yet, to use it you may use parchlinux r
 - [ ] Error Message for wrong input [#5](https://github.com/parchlinuxB/namban/issues/5)
 ## Far To Do
 - [ ] DoH & DoT support
+## Planned for v1
+- [ ] Add DoH support
+- [ ] Rewrite with new design in js
+
